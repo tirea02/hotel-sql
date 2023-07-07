@@ -104,6 +104,22 @@ public class Hotel {
         }
     }//function printAllRooms end
 
+    public void userReservedRooms(User user){
+        String sql = "SELECT * FROM reservation WHERE user_id = ?";
+        try (PreparedStatement statement = Objects.requireNonNull(DatabaseConfig.getConnection()).prepareStatement(sql)) {
+            statement.setString(1, user.getUserId());
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                String roomNumber = resultSet.getString("room_number");
+                System.out.println(roomNumber);
+            }
+        }catch (SQLException e) {
+            System.out.println("해당 userId를 DB에서 찾을 수 없습니다.");
+            e.printStackTrace();
+        }
+
+    }
+
 
     public void createReservation(String userId, String roomNumber) {
         try {

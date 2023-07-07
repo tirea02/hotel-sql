@@ -1,5 +1,7 @@
 package src;
 
+import lombok.extern.java.Log;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -55,7 +57,8 @@ class HotelWork {
 
             switch (choice) {
                 case 1 -> {
-
+                    User loginUser = Login.loginUser(hotel.getConnection());
+                    performActions(hotel, loginUser);
                 }
                 case 2 -> {
                     User newUser = SignUp.makeNewAccount(hotel.getConnection());
@@ -105,28 +108,26 @@ class HotelWork {
                     System.out.println("make reservation showing rooms");
                     hotel.printAllRooms();
 
-                    System.out.print("userId  : ");
-                    String userId = scanner.nextLine();
                     System.out.print("roomNumber : ");
                     String roomNumber = scanner.nextLine();
 
-                    hotel.createReservation(userId, roomNumber);
+                    hotel.createReservation(user.getUserId(), roomNumber);
 
                 }
                 case 3 -> {
                     // 예약 취소하기 로직
                     System.out.println("cancel reservation showing rooms");
                     hotel.printAllRooms();
-                    System.out.print("userId  : ");
-                    String userId = scanner.nextLine();
+
                     System.out.print("roomNumber : ");
                     String roomNumber = scanner.nextLine();
 
-                    hotel.cancelReservation(userId, roomNumber);
+                    hotel.cancelReservation(user.getUserId(), roomNumber);
 
                 }
                 case 4 -> {
                     //개인 예약 내역 보기
+                    hotel.userReservedRooms(user);
                 }
                 case 5-> {
                     // 개인 정보 수정 로직
