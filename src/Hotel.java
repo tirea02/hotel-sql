@@ -104,7 +104,7 @@ public class Hotel {
         }
     }//function printAllRooms end
 
-    public void userReservedRooms(User user){
+    public void printUserReservedRooms(User user){
         String sql = "SELECT * FROM reservation WHERE user_id = ?";
         try (PreparedStatement statement = Objects.requireNonNull(DatabaseConfig.getConnection()).prepareStatement(sql)) {
             statement.setString(1, user.getUserId());
@@ -145,15 +145,18 @@ public class Hotel {
     }//function createReservation end
 
     public void cancelReservation(String userId, String roomNumber){
-        try{
-            String deleteQuery = "delete from reservation where room_number = "+roomNumber;
-            Statement deleteStatement = connection.createStatement();
-            ResultSet deleteResult = deleteStatement.executeQuery(deleteQuery);
+        try {
+            String deleteQuery = "delete from reservation where user_id = ? and room_number = ?";
+            PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+            deleteStatement.setString(1, userId);
+            deleteStatement.setString(2, roomNumber);
+            int rowsAffected = deleteStatement.executeUpdate();
 
-
-            if(deleteResult.next()){
+            if (rowsAffected > 0) {
                 System.out.println("Reservation canceled successfully.");
                 updateRoomStatus("", roomNumber, false);
+            } else {
+                System.out.println("No reservation found for the specified user and room.");
             }
         } catch (SQLException e) {
             System.out.println("Failed to cancel reservation.");

@@ -117,7 +117,7 @@ class HotelWork {
                 case 3 -> {
                     // 예약 취소하기 로직
                     System.out.println("cancel reservation showing rooms");
-                    hotel.printAllRooms();
+                    hotel.printUserReservedRooms(user);
 
                     System.out.print("roomNumber : ");
                     String roomNumber = scanner.nextLine();
@@ -127,7 +127,7 @@ class HotelWork {
                 }
                 case 4 -> {
                     //개인 예약 내역 보기
-                    hotel.userReservedRooms(user);
+                    hotel.printUserReservedRooms(user);
                 }
                 case 5-> {
                     // 개인 정보 수정 로직
