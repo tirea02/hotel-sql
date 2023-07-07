@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Hotel {
     private final Connection connection;
-    private Room[][] rooms;
+    private Room[][] rooms; //update rooms with database update, plz note to sync rooms and database manually
 
     Hotel(){
         this.connection = DatabaseConfig.getConnection();
@@ -82,7 +82,7 @@ public class Hotel {
             e.printStackTrace();
         }
         return new Object[] { isReserved, userId };
-    }
+    }//function checkReservationStatus end
 
     public void printAllRooms(){
         for(Room[] floor : rooms){
@@ -99,21 +99,68 @@ public class Hotel {
             }
             System.out.println();
         }
-
     }//function printAllRooms end
 
 
     public void createReservation(String userId, String roomNumber) {
-        try (PreparedStatement statement = Objects.requireNonNull(DatabaseConfig.getConnection()).prepareStatement("INSERT INTO reservation (id, user_id, room_number, is_reserved) VALUES (reservation_seq.nextval, ?, ?, ?)")) {
-            statement.setString(1, userId);
-            statement.setString(2, roomNumber);
-            statement.setBoolean(3, true);
-            statement.executeUpdate();
+        try {
+            // Retrieve the maximum ID from the reservation table
+            String maxIdQuery = "SELECT MAX(id) FROM reservation";
+            Statement maxIdStatement = connection.createStatement();
+            ResultSet maxIdResult = maxIdStatement.executeQuery(maxIdQuery);
+
+            int nextId;
+            if (maxIdResult.next()) {
+                nextId = maxIdResult.getInt(1) + 1; // Increment the maximum ID by 1
+            } else {
+                nextId = 1; // If no records exist, start with ID 1
+            }
+
+            // Insert the reservation record with the generated ID
+            String insertQuery = "INSERT INTO reservation (id, user_id, room_number, is_reserved) VALUES (?, ?, ?, ?)";
+            PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+            insertStatement.setInt(1, nextId);
+            insertStatement.setString(2, userId);
+            insertStatement.setString(3, roomNumber);
+            insertStatement.setBoolean(4, true);
+            insertStatement.executeUpdate();
+            updateRoomStatus(userId, roomNumber, true);
+
+            System.out.println("Reservation created successfully.");
         } catch (SQLException e) {
-            System.out.println("Failed to insert reservation record.");
+            System.out.println("Failed to create reservation.");
             e.printStackTrace();
         }
-    }
+    }//function createReservation end
+
+    public void cancelReservation(String userId, String roomNumber){
+        try{
+            String deleteQuery = "delete from reservation where room_number = "+roomNumber;
+            Statement deleteStatement = connection.createStatement();
+            ResultSet deleteResult = deleteStatement.executeQuery(deleteQuery);
+
+
+            if(deleteResult.next()){
+                System.out.println("Reservation canceled successfully.");
+                updateRoomStatus("", roomNumber, false);
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to cancel reservation.");
+            e.printStackTrace();
+        }
+    }//function cancelReservation end
+
+    public void updateRoomStatus(String userId, String roomNumber, boolean isReserved) {
+        int floor = Integer.parseInt(roomNumber.substring(0, 1)) - 1;
+        int room = Integer.parseInt(roomNumber.substring(1)) - 1;
+        if (floor >= 0 && floor < rooms.length && room >= 0 && room < rooms[floor].length) {
+            Room currentRoom = rooms[floor][room];
+            currentRoom.setReserved(isReserved);
+            currentRoom.setUserId(userId);
+        } else {
+            System.out.println("Invalid room number.");
+        }
+    }//function updateRoomStatus end
 
 
 

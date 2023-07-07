@@ -1,6 +1,7 @@
 package src;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 @Getter
+@Setter
 public class Room {
     private String roomNumber;
     private String userId;

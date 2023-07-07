@@ -63,7 +63,27 @@ class HotelWork {
                     hotel.printAllRooms();
                 }
                 case 4->{ //temp case for unit test
-                    hotel.createReservation("sophia123", "202");
+                    System.out.println("make reservation showing rooms");
+                    hotel.printAllRooms();
+
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.print("userId  : ");
+                    String userId = scanner.nextLine();
+                    System.out.print("roomNumber : ");
+                    String roomNumber = scanner.nextLine();
+
+                    hotel.createReservation(userId, roomNumber);
+                }
+                case 5->{ //temp case for unit test
+                    System.out.println("cancel reservation showing rooms");
+                    hotel.printAllRooms();
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.print("userId  : ");
+                    String userId = scanner.nextLine();
+                    System.out.print("roomNumber : ");
+                    String roomNumber = scanner.nextLine();
+
+                    hotel.cancelReservation(userId, roomNumber);
                 }
                 case 9 -> {
                     System.out.println("프로그램을 종료합니다.");
