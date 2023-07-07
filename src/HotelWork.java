@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static src.SignUp.makeNewAccount;
 import static src.UnitTest.connectionTest;
 
 class HotelWork {
@@ -57,33 +58,11 @@ class HotelWork {
 
                 }
                 case 2 -> {
-
+                    User newUser = SignUp.makeNewAccount(hotel.getConnection());
+                    performActions(hotel, newUser);
                 }
                 case 3->{
                     hotel.printAllRooms();
-                }
-                case 4->{ //temp case for unit test
-                    System.out.println("make reservation showing rooms");
-                    hotel.printAllRooms();
-
-                    Scanner scanner = new Scanner(System.in);
-                    System.out.print("userId  : ");
-                    String userId = scanner.nextLine();
-                    System.out.print("roomNumber : ");
-                    String roomNumber = scanner.nextLine();
-
-                    hotel.createReservation(userId, roomNumber);
-                }
-                case 5->{ //temp case for unit test
-                    System.out.println("cancel reservation showing rooms");
-                    hotel.printAllRooms();
-                    Scanner scanner = new Scanner(System.in);
-                    System.out.print("userId  : ");
-                    String userId = scanner.nextLine();
-                    System.out.print("roomNumber : ");
-                    String roomNumber = scanner.nextLine();
-
-                    hotel.cancelReservation(userId, roomNumber);
                 }
                 case 9 -> {
                     System.out.println("프로그램을 종료합니다.");
@@ -98,8 +77,8 @@ class HotelWork {
         Scanner scanner = new Scanner(System.in);
         isLogin = true;
         // Perform actions for the logged-in user
-//        System.out.println("사용자 " + user.getUserName() + "로 로그인되었습니다.");
-//        headMessage = user.getUserName() + "님 환영합니다";
+        System.out.println("사용자 " + user.getName() + "로 로그인되었습니다.");
+        headMessage = user.getName() + "님 환영합니다";
 
         while (isLogin) {
             System.out.println(headMessage);
@@ -123,10 +102,27 @@ class HotelWork {
                 }
                 case 2 -> {
                     //예약하기 로직
+                    System.out.println("make reservation showing rooms");
+                    hotel.printAllRooms();
+
+                    System.out.print("userId  : ");
+                    String userId = scanner.nextLine();
+                    System.out.print("roomNumber : ");
+                    String roomNumber = scanner.nextLine();
+
+                    hotel.createReservation(userId, roomNumber);
 
                 }
                 case 3 -> {
                     // 예약 취소하기 로직
+                    System.out.println("cancel reservation showing rooms");
+                    hotel.printAllRooms();
+                    System.out.print("userId  : ");
+                    String userId = scanner.nextLine();
+                    System.out.print("roomNumber : ");
+                    String roomNumber = scanner.nextLine();
+
+                    hotel.cancelReservation(userId, roomNumber);
 
                 }
                 case 4 -> {

@@ -1,8 +1,11 @@
 package src;
 
+import lombok.Getter;
+
 import java.sql.*;
 import java.util.Objects;
 
+@Getter
 public class Hotel {
     private final Connection connection;
     private Room[][] rooms; //update rooms with database update, plz note to sync rooms and database manually
