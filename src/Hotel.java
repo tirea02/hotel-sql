@@ -14,8 +14,6 @@ public class Hotel {
         this.connection = DatabaseConfig.getConnection();
         int floorCount = getFloorCountFromDatabase();
         int roomsPerFloor = getRoomsPerFloorFromDatabase();
-        System.out.println(floorCount);
-        System.out.println(roomsPerFloor);
         // Initialize the rooms array with the retrieved values
         this.rooms = new Room[floorCount][roomsPerFloor];
 

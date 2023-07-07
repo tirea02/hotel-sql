@@ -1,13 +1,11 @@
 package src;
 
-import lombok.extern.java.Log;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static src.SignUp.makeNewAccount;
-import static src.UnitTest.connectionTest;
+
 
 class HotelWork {
     String headMessage="";
