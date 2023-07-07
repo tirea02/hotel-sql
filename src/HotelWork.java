@@ -131,14 +131,23 @@ class HotelWork {
                 }
                 case 5-> {
                     // 개인 정보 수정 로직
+                    System.out.println("아직 미구현입니다.");
 
                 }
                 case 6 -> {
                     // 비밀번호 변경 로직
+                    System.out.println("아직 미구현입니다2.");
                 }
                 case 7 -> {
                     // 회원 탈퇴 로직
-
+                    System.out.println(user.getName()+"님 탈퇴하시겠습니까? 이 결정은 번복할 수 없습니다.");
+                    System.out.print("정말 탈퇴하시려면 1번을 취소하시려면 아무키나 입력하세요 : ");
+                    int tempInput = Integer.parseInt(scanner.nextLine());
+                    if(tempInput==1){
+                        hotel.signOutUser(user.getUserId());
+                        isLogin = false;
+                        System.out.println("정상 탈퇴 처리 되었습니다.");
+                    }
                 }
                 default -> {
                     System.out.println("잘못된 선택입니다. 다시 선택하세요.");

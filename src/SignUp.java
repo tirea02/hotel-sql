@@ -69,8 +69,6 @@ public class SignUp {
 
     public static void addNewUser(Connection connection, User user){
         try {
-
-
             // Insert the reservation record with the generated ID
             String insertQuery = "INSERT INTO guest (id, user_id, password, name) VALUES (?, ?, ?, ?)";
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
@@ -79,15 +77,11 @@ public class SignUp {
             insertStatement.setString(3, user.getPassWord());
             insertStatement.setString(4, user.getName());
             insertStatement.executeUpdate();
-
             System.out.println("add new user successfully.");
         } catch (SQLException e) {
             System.out.println("Failed to create reservation.");
             e.printStackTrace();
         }
-
-
-
     }
 
 }//class SignUp END

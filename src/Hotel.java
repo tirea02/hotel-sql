@@ -176,6 +176,49 @@ public class Hotel {
         }
     }//function updateRoomStatus end
 
+    public  void signOutUser(String userId) {
+        PreparedStatement selectReservationStatement = null;
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            Objects.requireNonNull(connection).setAutoCommit(true); // Enable auto-commit
+
+            // Set isolation level
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+
+            // Retrieve the reservations for the user
+            String selectReservationQuery = "SELECT room_number FROM reservation WHERE user_id = ?";
+            selectReservationStatement = connection.prepareStatement(selectReservationQuery);
+            selectReservationStatement.setString(1, userId);
+            ResultSet resultSet = selectReservationStatement.executeQuery();
+
+            // Cancel all reservations before signOut
+            while (resultSet.next()) {
+                String roomNumber = resultSet.getString("room_number");
+                cancelReservation(userId, roomNumber);
+            }
+            System.out.println("Deleted all reservations successfully.");
+
+            // Delete user from guest table
+            String deleteUserQuery = "DELETE FROM guest WHERE user_id = ?";
+            PreparedStatement deleteGuestStatement = connection.prepareStatement(deleteUserQuery);
+            deleteGuestStatement.setString(1, userId);
+            deleteGuestStatement.executeUpdate();
+            System.out.println("Deleted user successfully.");
+
+        } catch (SQLException e) {
+            System.out.println("Failed to delete user.");
+            e.printStackTrace();
+        } finally {
+            // Close prepared statement
+            try {
+                if (selectReservationStatement != null) {
+                    selectReservationStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 
 
