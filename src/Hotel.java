@@ -105,16 +105,8 @@ public class Hotel {
     public void createReservation(String userId, String roomNumber) {
         try {
             // Retrieve the maximum ID from the reservation table
-            String maxIdQuery = "SELECT MAX(id) FROM reservation";
-            Statement maxIdStatement = connection.createStatement();
-            ResultSet maxIdResult = maxIdStatement.executeQuery(maxIdQuery);
 
-            int nextId;
-            if (maxIdResult.next()) {
-                nextId = maxIdResult.getInt(1) + 1; // Increment the maximum ID by 1
-            } else {
-                nextId = 1; // If no records exist, start with ID 1
-            }
+            int nextId = DatabaseUtils.generateNewId(connection, "reservation");
 
             // Insert the reservation record with the generated ID
             String insertQuery = "INSERT INTO reservation (id, user_id, room_number, is_reserved) VALUES (?, ?, ?, ?)";
@@ -166,4 +158,4 @@ public class Hotel {
 
 
 
-}//Hotel class END
+}//class Hotel END
